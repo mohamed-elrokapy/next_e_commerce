@@ -1,6 +1,6 @@
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../convex/_generated/api";
-import { Card, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,12 +15,13 @@ export default async function Home() {
             when you are home{" "}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto ">
-            this is the place that you will find your BEST TASTE ,WELL MADE F_O_O_D
+            this is the place that you will find your BEST TASTE ,WELL MADE
+            F_O_O_D
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {courses.slice(0, 3).map((course) => (
-            <Card key={course._id} className="flex flex-col">
+            <Card key={course._id} className="flex flex-col ">
               <Link href={`/courses/${course._id}`} className="cursor-pointer">
                 <CardHeader>
                   <Image
@@ -28,12 +29,16 @@ export default async function Home() {
                     alt={course.title}
                     width={640}
                     height={360}
-                    className="rounded object-cover"
+                    className="rounded object-cover w-full h-80"
                   />
                 </CardHeader>
+                <CardContent className="flex-grow">
+                  <CardTitle className="text-2xl font-bold mb-2 hover:underline ">
+                    {" "}
+                    {course.title}
+                  </CardTitle>
+                </CardContent>
               </Link>
-
-              {course.title}
             </Card>
           ))}
         </div>
