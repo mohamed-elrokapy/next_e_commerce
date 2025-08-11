@@ -52,7 +52,7 @@ const Navbar = () => {
               size={"sm"}
               className="flex items-center gap-2">
               <CreditCardIcon className="size-4" />
-              <span className="hidden sm:inline"> Billing</span>
+              <span className="hidden sm:inline text-black"> Billing</span>
             </Button>
           </Link>
         </SignedIn>
@@ -66,7 +66,7 @@ const Navbar = () => {
               size={"sm"}
               className="flex items-center gap-2">
               <LogOutIcon className="size-4" />
-              <span className="hidden sm:inline"> log out</span>
+              <span className="hidden sm:inline text-black"> log out</span>
             </Button>
           </SignOutButton>
         </SignedIn>

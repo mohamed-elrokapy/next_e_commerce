@@ -1,7 +1,8 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import { ConvexClientProvider } from "@/components/providers/ConvexClientProvider";
-import Navbar from "@/components/Navbar";
+import { ConvexClientProvider } from "../components/providers/ConvexClientProvider";
+import Navbar from "../components/Navbar";
+import { Toaster } from "../components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
           <div className=" inset-0 -z-10 min-h-full min-w-full bg-black [background:radial-gradient(125%_125%_at_50%_10%,#fafafa_40%,#63e_100%)]">
             <Navbar />
             {children}
+            <Toaster />
           </div>
         </ConvexClientProvider>
       </body>

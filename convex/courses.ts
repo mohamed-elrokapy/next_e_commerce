@@ -9,7 +9,7 @@ export const getCourses = query({
   },
 });
 
-export const getCourse = query({
+export const getCourseById = query({
   args: { courseId: v.id("courses") },
   handler: async (ctx, args) => {
     return await ctx.db.get(args.courseId);

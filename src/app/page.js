@@ -1,8 +1,17 @@
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../convex/_generated/api";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { Button } from "../components/ui/button";
+import PurchaseButton from "../components/PurchaseButton";
 
 export default async function Home() {
   const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL);
@@ -39,7 +48,23 @@ export default async function Home() {
                   </CardTitle>
                 </CardContent>
               </Link>
-            </Card>
+              <CardFooter className={"flex justify-between items-center"}>
+                <Button
+                  variant="default"
+                  height={100}
+                  width={100}
+                  className=" text-2xl px-4 py-1 text-white ">
+                  ${course.price}
+                </Button>
+
+                <SignedIn><PurchaseButton courseId={course._id}/></SignedIn>
+                 <SignedOut>
+                  <SignInButton mode="modal">
+                    <Button variant={"outline"}>buy now</Button>
+                  </SignInButton>
+                </SignedOut>
+              </CardFooter>
+            </Card >
           ))}
         </div>
       </main>
