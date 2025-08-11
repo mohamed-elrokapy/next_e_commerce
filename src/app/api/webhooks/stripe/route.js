@@ -1,11 +1,9 @@
-import Stripe from "stripe";
 import stripe from "../../../../lib/stripe";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../../../../convex/_generated/api";
-import { Id } from "../../../../convex/_generated/dataModel";
 import resend from "../../../../lib/resend";
-import PurchaseConfirmationEmail from "@/emails/PurchaseConfirmationEmail";
-import ProPlanActivatedEmail from "@/emails/ProPlanActivatedEmail";
+import PurchaseConfirmationEmail from "../../../../emails/PurchaseConfirmationEmail";
+import ProPlanActivatedEmail from "../../../../emails/ProPlanActivatedEmail";
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL);
 

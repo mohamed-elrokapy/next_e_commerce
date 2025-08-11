@@ -11,7 +11,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "../../components/ui/card";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -19,7 +19,7 @@ import {
   Loader2,
   Zap,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../components/ui/button";
 import Link from "next/link";
 import { toast } from "sonner";
 

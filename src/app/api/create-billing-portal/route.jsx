@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { ConvexHttpClient } from "convex/browser";
 import { NextResponse } from "next/server";
 import { api } from "../../../../convex/_generated/api";
-import stripe from "@/lib/stripe";
+import stripe from "../../../lib/stripe";
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL);
 
