@@ -1,49 +1,38 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../../../components/ui/card";
 import { CheckCircle } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { Button } from "../../../../components/ui/button";
 
+export const metadata = { title: "Purchase complete" };
+
 const page = async ({ params, searchParams }) => {
   const { courseid } = await params;
   const { session_id } = await searchParams;
   return (
-    <div className="container mx-auto py-12 px-4 ">
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader className="text-center">
-          <CheckCircle className=" size-16 text-green-500 mx-auto mb-4 " />
-          <CardTitle className="text-3xl font-bold text-green-700">
-            purchase successfull
-          </CardTitle>
-        </CardHeader>
-
-        <CardContent className="text-center space-y-6">
-          <p className="text-xl text-gray-600">
-            thank you for enrolling our course. your journey begins now !{" "}
-          </p>
-          <div className="bg-gray-100 p-4 rounded-md ">
-            <p className="text-sm text-gray-500">
-              Transaction Id : {session_id}
-            </p>
-          </div>
-          <Link href={`/courses/${courseid}`}>
-            <Button className="w-full sm:w-auto items-center justify-center">
-              go to course{" "}
-            </Button>
-          </Link>
-
-          <Link href={"/courses"}>
-            <Button variant="outlin e" className="w-full sm:w-auto ">
-              explore our courses{" "}
-            </Button>
-          </Link>
-        </CardContent>
-      </Card>
+    <div className="mx-auto max-w-xl px-4 py-16 text-center sm:px-6">
+      <CheckCircle
+        className="mx-auto mb-5 size-14 text-primary"
+        aria-hidden="true"
+      />
+      <h1 className="font-display text-4xl font-medium tracking-tight">
+        Purchase complete
+      </h1>
+      <p className="mt-3 text-lg text-muted-foreground">
+        Thank you for your order.
+      </p>
+      {session_id && (
+        <p className="mt-6 break-all rounded-lg border bg-card px-4 py-3 text-sm text-muted-foreground">
+          Transaction ID: {session_id}
+        </p>
+      )}
+      <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <Button asChild>
+          <Link href={`/courses/${courseid}`}>View item</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/courses">Back to the menu</Link>
+        </Button>
+      </div>
     </div>
   );
 };
