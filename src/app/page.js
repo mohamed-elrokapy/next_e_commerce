@@ -1,73 +1,102 @@
-import { ConvexHttpClient } from "convex/browser";
-import { api } from "../../convex/_generated/api";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../components/ui/card";
-import Image from "next/image";
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { ArrowRight } from "lucide-react";
+import { getCatalog } from "../lib/catalog";
+import ItemCard from "../components/ItemCard";
+import ItemImage from "../components/ItemImage";
+import SampleNotice from "../components/SampleNotice";
 import { Button } from "../components/ui/button";
-import PurchaseButton from "../components/PurchaseButton";
+
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL);
-  const courses = await convex.query(api.courses.getCourses);
-  return (
-    <div className="flex flex-col min-h-screen">
-      <main className="flex-grow container mx-auto py-16 px-4">
-        <div className="text-center mb-16 ">
-          <h1 className="text-4xl font-extrabold tracking-tight mb-4 lg:text-5xl">
-            when you are home{" "}
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto ">
-            this is the place that you will find your BEST TASTE ,WELL MADE
-            F_O_O_D
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {courses.slice(0, 3).map((course) => (
-            <Card key={course._id} className="flex flex-col ">
-              <Link href={`/courses/${course._id}`} className="cursor-pointer">
-                <CardHeader>
-                  <Image
-                    src={course.imageUrl}
-                    alt={course.title}
-                    width={640}
-                    height={360}
-                    className="rounded object-cover w-full h-80"
-                  />
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <CardTitle className="text-2xl font-bold mb-2 hover:underline ">
-                    {" "}
-                    {course.title}
-                  </CardTitle>
-                </CardContent>
-              </Link>
-              <CardFooter className={"flex justify-between items-center"}>
-                <Button
-                  variant="default"
-                  height={100}
-                  width={100}
-                  className=" text-2xl px-4 py-1 text-white ">
-                  ${course.price}
-                </Button>
+  const { items, source } = await getCatalog();
+  const purchasable = source === "convex";
+  const featured = items.slice(0, 3);
+  const [heroA, heroB] = items;
 
-                <SignedIn><PurchaseButton courseId={course._id}/></SignedIn>
-                 <SignedOut>
-                  <SignInButton mode="modal">
-                    <Button variant={"outline"}>buy now</Button>
-                  </SignInButton>
-                </SignedOut>
-              </CardFooter>
-            </Card >
-          ))}
+  return (
+    <>
+      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.25fr_1fr] md:py-20">
+        <div>
+          <p className="mb-4 text-sm font-medium uppercase tracking-widest text-primary">
+            Pancakes and waffles
+          </p>
+          <h1 className="text-balance font-display text-5xl font-medium leading-[1.05] tracking-tight sm:text-6xl">
+            When you are home,
+            <br />
+            <em className="font-normal text-primary">find your best taste.</em>
+          </h1>
+          <p className="mt-6 max-w-md text-lg text-muted-foreground">
+            Well-made food, picked from a short menu. Choose a plate and pay
+            securely at checkout.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild size="lg">
+              <Link href="/courses">
+                Browse the menu
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </Button>
+          </div>
         </div>
-      </main>
-    </div>
+
+        {heroA && (
+          <div className="relative mx-auto w-full max-w-md pb-10 md:max-w-none">
+            <ItemImage
+              src={heroA.imageUrl}
+              alt={heroA.title}
+              priority
+              ratio="aspect-[5/4]"
+              sizes="(min-width: 768px) 40vw, 90vw"
+              className="rounded-2xl border shadow-md"
+            />
+            {heroB && (
+              <ItemImage
+                src={heroB.imageUrl}
+                alt={heroB.title}
+                ratio="aspect-square"
+                sizes="30vw"
+                className="absolute -bottom-0 -left-2 w-2/5 rounded-xl border-4 border-background shadow-md sm:-left-6"
+              />
+            )}
+          </div>
+        )}
+      </section>
+
+      <section
+        aria-labelledby="menu-heading"
+        className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
+        {!purchasable && <SampleNotice />}
+        <div className="mb-8 flex items-end justify-between gap-4">
+          <h2
+            id="menu-heading"
+            className="font-display text-3xl font-medium tracking-tight">
+            From the menu
+          </h2>
+          <Link
+            href="/courses"
+            className="text-sm font-medium text-primary underline-offset-4 hover:underline">
+            See all {items.length} items
+          </Link>
+        </div>
+
+        {featured.length === 0 ? (
+          <p className="rounded-xl border border-dashed p-10 text-center text-muted-foreground">
+            The menu is empty right now. Please check back soon.
+          </p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((item, i) => (
+              <ItemCard
+                key={item.id}
+                item={item}
+                purchasable={purchasable}
+                priority={i === 0}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    </>
   );
 }

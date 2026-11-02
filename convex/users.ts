@@ -8,7 +8,6 @@ export const createUser = mutation({
     clerkId: v.string(),
     stripeCustomerId: v.string(),
   },
-  /*************  ✨ Windsurf Command 🌟  *************/
   /**
    * Create a new user.
    *
@@ -39,7 +38,6 @@ export const createUser = mutation({
 
     return userId;
   },
-  /*******  d2bd3e86-e53c-44e3-94c0-54531a7ca989  *******/
 });
 
 export const getUserByClerkId = query({

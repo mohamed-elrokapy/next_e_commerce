@@ -54,7 +54,7 @@ const ProPage = () => {
         window.location.href = result.checkoutUrl;
       }
     } catch (error) {
-      if (error.message.includes("Rate limit exceeded")) {
+      if (error.message?.toLowerCase().includes("rate limit exceeded")) {
         toast.error("You've tried too many times. Please try again later.");
       } else {
         toast.error(
@@ -68,17 +68,17 @@ const ProPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-16 max-w-6xl h-screen">
-      <h1 className="text-4xl font-bold text-center mb-4 text-gray-800">
+    <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
+      <h1 className="mb-3 text-center font-display text-4xl font-medium tracking-tight">
         Choose Your Pro Journey
       </h1>
-      <p className="text-xl text-center mb-12 text-gray-600">
+      <p className="mb-12 text-center text-lg text-muted-foreground">
         Unlock premium features and accelerate your learning
       </p>
 
       {isUserLoaded && userSubscription?.status === "active" && (
-        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8 rounded-md">
-          <p className="text-blue-700">
+        <div className="mb-8 rounded-lg border-l-4 border-primary bg-secondary p-4">
+          <p>
             You have an active{" "}
             <span className="font-semibold">{userSubscription.planType}</span>{" "}
             subscription.
@@ -91,23 +91,21 @@ const ProPage = () => {
           <Card
             key={plan.id}
             className={`
-               flex flex-col transition-all duration-300 ${
-                 plan.highlighted
-                   ? "border-purple-400 shadow-lg hover:shadow-xl"
-                   : "hover:border-purple-200 hover:shadow-md"
+               flex flex-col transition-shadow duration-300 hover:shadow-md ${
+                 plan.highlighted ? "border-primary border-2" : ""
                }
           `}>
             <CardHeader className="flex-grow">
               <CardTitle
-                className={`text-2xl ${plan.highlighted ? "text-purple-600" : "text-gray-800"}`}>
+                className="font-display text-2xl font-medium">
                 {plan.title}
               </CardTitle>
 
               <CardDescription className="mt-2">
-                <span className="text-3xl font-bold text-gray-900">
+                <span className="font-display text-4xl text-foreground">
                   {plan.price}
                 </span>
-                <span className="text-gray-600 ml-1">{plan.period}</span>
+                <span className="ml-1 text-muted-foreground">{plan.period}</span>
               </CardDescription>
             </CardHeader>
 
@@ -116,9 +114,9 @@ const ProPage = () => {
                 {plan.features.map((feature, fIdx) => (
                   <li key={fIdx} className="flex items-center">
                     <Check
-                      className={`h-5 w-5 ${plan.highlighted ? "text-purple-500" : "text-green-500"} mr-2 flex-shrink-0`}
+                      className="mr-2 h-5 w-5 flex-shrink-0 text-primary" aria-hidden="true"
                     />
-                    <span className="text-gray-700">{feature}</span>
+                    <span>{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -126,11 +124,9 @@ const ProPage = () => {
 
             <CardFooter className="mt-auto">
               <Button
-                className={`w-full py-6 text-lg ${
-                  plan.highlighted
-                    ? "bg-purple-600 hover:bg-purple-700 text-white"
-                    : "bg-white text-purple-600 border-2 border-purple-600 hover:bg-purple-50"
-                }`}
+                className="w-full"
+                size="lg"
+                variant={plan.highlighted ? "default" : "outline"}
                 onClick={() => handlePlanSelection(plan.id)}
                 disabled={
                   userSubscription?.status === "active" &&

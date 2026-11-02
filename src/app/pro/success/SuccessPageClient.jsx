@@ -18,7 +18,6 @@ const SuccessPageClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // استخدم useMemo عشان تتأكد من عدم إعادة الحساب كل مرة
   const isYearly = useMemo(
     () => searchParams.get("year") === "true",
     [searchParams]
@@ -40,30 +39,24 @@ const SuccessPageClient = () => {
       ];
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-16 max-w-4xl h-screen">
+    <div className="mx-auto max-w-2xl px-4 py-12 md:py-16 sm:px-6">
       <Card className="w-full overflow-hidden">
-        <div
-          className={`w-full h-2 ${
-            isYearly
-              ? "bg-gradient-to-r from-purple-500 to-pink-500"
-              : "bg-blue-500"
-          }`}
-        />
+        <div className="h-2 w-full bg-primary" />
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             {isYearly ? (
               <Badge variant="secondary" className="text-lg px-3 py-1">
-                <Star className="mr-1 h-5 w-5 text-yellow-500" />
+                <Star className="mr-1 h-5 w-5 text-primary" />
                 Yearly Pro
               </Badge>
             ) : (
               <Badge variant="secondary" className="text-lg px-3 py-1">
-                <Clock className="mr-1 h-5 w-5 text-blue-500" />
+                <Clock className="mr-1 h-5 w-5 text-primary" />
                 Monthly Pro
               </Badge>
             )}
           </div>
-          <CardTitle className="text-3xl md:text-4xl font-bold mb-2 text-primary">
+          <CardTitle className="mb-2 font-display text-3xl font-medium md:text-4xl">
             Welcome to Pro!
           </CardTitle>
           <CardDescription className="text-lg md:text-xl">
@@ -82,9 +75,7 @@ const SuccessPageClient = () => {
                   key={index}
                   className="flex items-center space-x-3 text-sm md:text-base">
                   <Check
-                    className={`flex-shrink-0 h-6 w-6 ${
-                      isYearly ? "text-purple-500" : "text-green-500"
-                    }`}
+                    className="h-6 w-6 flex-shrink-0 text-primary" aria-hidden="true"
                   />
                   <span>{benefit}</span>
                 </li>

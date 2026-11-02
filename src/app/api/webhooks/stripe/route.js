@@ -114,14 +114,22 @@ async function handleSubscriptionUpsert(subscription, eventType) {
     );
   }
 
+  // Since Stripe API 2025-03-31 (basil) the billing period lives on the
+  // subscription item, not on the subscription. Keep a fallback for older events.
+  const item = subscription.items.data[0];
+  const currentPeriodStart =
+    item.current_period_start ?? subscription.current_period_start;
+  const currentPeriodEnd =
+    item.current_period_end ?? subscription.current_period_end;
+
   try {
     await convex.mutation(api.subscriptions.upsertSubscription, {
       userId: user._id,
       stripeSubscriptionId: subscription.id,
       status: subscription.status,
-      planType: subscription.items.data[0].plan.interval,
-      currentPeriodStart: subscription.current_period_start,
-      currentPeriodEnd: subscription.current_period_end,
+      planType: item.plan.interval,
+      currentPeriodStart,
+      currentPeriodEnd,
       cancelAtPeriodEnd: subscription.cancel_at_period_end,
     });
     console.log(
@@ -137,9 +145,9 @@ async function handleSubscriptionUpsert(subscription, eventType) {
         subject: "Welcome to MasterClass Pro!",
         react: ProPlanActivatedEmail({
           name: user.name,
-          planType: subscription.items.data[0].plan.interval,
-          currentPeriodStart: subscription.current_period_start,
-          currentPeriodEnd: subscription.current_period_end,
+          planType: item.plan.interval,
+          currentPeriodStart,
+          currentPeriodEnd,
           url: process.env.NEXT_PUBLIC_APP_URL,
         }),
       });

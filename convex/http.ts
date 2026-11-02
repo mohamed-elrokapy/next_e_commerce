@@ -34,9 +34,6 @@ const clerkWebhook = httpAction(async (ctx, request) => {
     return new Response("Error verifying webhook", { status: 400 });
   }
 
-  // 🟢 Log كامل للـ evt
-  console.log("📩 Full Webhook Event:", JSON.stringify(evt, null, 2));
-
   const eventType = evt.type;
 
   if (eventType === "user.created") {
@@ -44,8 +41,6 @@ const clerkWebhook = httpAction(async (ctx, request) => {
 
     const email = email_addresses?.[0]?.email_address || "";
     const name = `${first_name || ""} ${last_name || ""}`.trim();
-
-    console.log("🛠 Data to send to Convex:", { email, name, clerkId: id });
 
     try {
       const customer = await stripe.customers.create({
