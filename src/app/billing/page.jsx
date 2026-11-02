@@ -71,56 +71,56 @@ const BillingPage = () => {
 
   if (!userData || subscription === undefined) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+      <div className="flex min-h-[60vh] items-center justify-center" role="status" aria-label="Loading">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-12 px-4 max-w-4xl ">
-      <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
+    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      <h1 className="mb-8 text-center font-display text-4xl font-medium tracking-tight">
         Billing Management
       </h1>
-      <Card className="w-full shadow-lg border-0 overflow-hidden">
+      <Card className="w-full overflow-hidden">
         {subscription ? (
           <>
             <CardHeader className="pb-0">
-              <CardTitle className="text-2xl text-gray-800 flex items-center gap-2">
-                <CheckCircle2 className="h-6 w-6 text-green-500" />
+              <CardTitle className="flex items-center gap-2 font-display text-2xl font-medium">
+                <CheckCircle2 className="h-6 w-6 text-primary" />
                 Active Subscription
               </CardTitle>
-              <CardDescription className="text-gray-600">
+              <CardDescription className="text-muted-foreground">
                 Manage your subscription details below
               </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-6 pt-6">
-              <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
+              <div className="grid grid-cols-2 gap-4 bg-secondary p-4 rounded-lg">
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Plan</p>
-                  <p className="text-lg font-semibold text-gray-800 capitalize">
+                  <p className="text-sm font-medium text-muted-foreground">Plan</p>
+                  <p className="text-lg font-semibold text-foreground capitalize">
                     {subscription.planType}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Status</p>
-                  <p className="text-lg font-semibold text-gray-800 capitalize">
+                  <p className="text-sm font-medium text-muted-foreground">Status</p>
+                  <p className="text-lg font-semibold text-foreground capitalize">
                     {subscription.status}
                   </p>
                 </div>
                 <div className="col-span-2">
-                  <p className="text-sm font-medium text-gray-500">
+                  <p className="text-sm font-medium text-muted-foreground">
                     Next billing date
                   </p>
-                  <p className="text-lg font-semibold text-gray-800">
+                  <p className="text-lg font-semibold text-foreground">
                     {formatDate(subscription.currentPeriodEnd)}
                   </p>
                 </div>
               </div>
               {subscription.cancelAtPeriodEnd && (
-                <div className="flex items-center bg-yellow-50 p-4 rounded-lg text-yellow-700">
+                <div className="flex items-center bg-accent p-4 rounded-lg text-accent-foreground">
                   <AlertTriangle className="h-5 w-5 mr-3 flex-shrink-0" />
                   <p className="text-sm">
                     Your subscription will be cancelled at the end of the
@@ -130,11 +130,11 @@ const BillingPage = () => {
               )}
             </CardContent>
 
-            <CardFooter className="flex justify-end bg-gray-50 mt-6">
+            <CardFooter className="mt-6 flex justify-end bg-secondary">
               <Button
                 onClick={handleManageBilling}
                 disabled={isLoading}
-                className="bg-purple-600 hover:bg-purple-700 text-white">
+                >
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -148,22 +148,21 @@ const BillingPage = () => {
           </>
         ) : (
           <>
-            <div className="bg-gradient-to-r from-gray-200 to-gray-300 h-2 w-full"></div>
-            <CardHeader>
-              <CardTitle className="text-2xl text-gray-800 flex items-center gap-2">
-                <CreditCard className="h-6 w-6 text-gray-600" />
+                        <CardHeader>
+              <CardTitle className="flex items-center gap-2 font-display text-2xl font-medium">
+                <CreditCard className="h-6 w-6 text-muted-foreground" />
                 No Active Subscription
               </CardTitle>
-              <CardDescription className="text-gray-600">
+              <CardDescription className="text-muted-foreground">
                 Upgrade to Pro to unlock premium features
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center py-12">
-              <p className="text-lg mb-6 text-gray-700">
+              <p className="mb-6 text-lg">
                 Get access to exclusive content and features with our Pro plan.
               </p>
               <Link href="/pro">
-                <Button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-200 ease-in-out transform hover:scale-105 hover:shadow-lg">
+                <Button size="lg">
                   <Zap className="mr-2 h-5 w-5" />
                   Explore Pro Plans
                 </Button>

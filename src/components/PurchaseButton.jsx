@@ -4,74 +4,66 @@ import { useAction, useQuery } from "convex/react";
 import React, { useState } from "react";
 import { api } from "../../convex/_generated/api";
 import { Button } from "./ui/button";
-import { Loader2Icon } from "lucide-react";
+import { Check, Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 
 const PurchaseButton = ({ courseId }) => {
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const createCheckoutSession = useAction(api.stripe.createCheckoutSession);
 
   const { user } = useUser();
   const userData = useQuery(
     api.users.getUserByClerkId,
-    user
-      ? {
-          clerkId: user?.id,
-        }
-      : "skip"
+    user ? { clerkId: user.id } : "skip"
   );
   const userAccess = useQuery(
     api.users.getUserAccess,
-    userData
-      ? {
-          userId: userData._id,
-          courseId,
-        }
-      : "skip"
+    userData ? { userId: userData._id, courseId } : "skip"
   ) || { hasAccess: false };
 
   const handlePurchase = async () => {
-    if (!user) toast.error("Please log in to purchase");
-    setisLoading(true);
+    if (!user) {
+      toast.error("Please log in to buy");
+      return;
+    }
+    setIsLoading(true);
     try {
       const { checkoutUrl } = await createCheckoutSession({ courseId });
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
-      } else {
-        throw new Error("failed to create checkout session");
-      }
+      if (!checkoutUrl) throw new Error("Failed to create checkout session");
+      window.location.href = checkoutUrl;
     } catch (err) {
-      // to do : handle error herr
-      if (err.message.includes("rate limit exceeded")) {
-        toast.error("rate limit exceeded , please try again later");
+      if (err.message?.toLowerCase().includes("rate limit exceeded")) {
+        toast.error("Too many attempts. Please try again in a minute.");
       } else {
-        toast.error(
-          err.message || "some thing went wrong please try again later"
-        );
+        toast.error("Something went wrong. Please try again later.");
       }
-      console.log("errror from purchase button ");
+      console.error("Checkout failed:", err);
+      setIsLoading(false);
     }
   };
 
-  if (!userAccess.hasAccess) {
-    return (
-      <Button variant={"outline"} onClick={handlePurchase} disabled={isLoading}>
-        enroll now{" "}
-      </Button>
-    );
-  }
   if (userAccess.hasAccess) {
-    return <Button variant="outline">enrolled</Button>;
-  }
-  if (isLoading) {
     return (
-      <Button variant="outline">
-        <Loader2Icon className="mr-2 size-4 animate-spin" />
-        proccessing
+      <Button variant="outline" disabled>
+        <Check aria-hidden="true" />
+        Purchased
       </Button>
     );
   }
+
+  return (
+    <Button onClick={handlePurchase} disabled={isLoading}>
+      {isLoading ? (
+        <>
+          <Loader2Icon className="animate-spin" aria-hidden="true" />
+          Processing
+        </>
+      ) : (
+        "Buy"
+      )}
+    </Button>
+  );
 };
 
 export default PurchaseButton;
