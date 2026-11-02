@@ -7,7 +7,7 @@ import stripe from "../../../lib/stripe";
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL);
 
 export async function POST() {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
